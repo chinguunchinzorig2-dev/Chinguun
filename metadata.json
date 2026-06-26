@@ -1,0 +1,6 @@
+{
+  "name": "Prisma Creative Studio",
+  "description": "A dark, moody, and cinematic landing page for Prisma, a worldwide network of visual artists, filmmakers, and storytellers featuring rich animations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
