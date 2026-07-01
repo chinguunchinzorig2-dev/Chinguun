@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Play, RotateCcw, Trophy, Target, Zap, Award, Sparkles, Coins, ShoppingBag, Flame, Star, Gamepad2 } from 'lucide-react';
+import { X, Play, RotateCcw, Trophy, Target, Zap, Award, Sparkles, Coins, ShoppingBag, Flame, Star, Gamepad2, Brain } from 'lucide-react';
+import { AnimeGuesser } from './AnimeGuesser';
 
 interface TargetItem {
   id: number;
@@ -34,12 +35,12 @@ interface FloatingText {
 interface ArcadeGameProps {
   isOpen: boolean;
   onClose: () => void;
-  initialTab?: 'menu' | 'shooter' | 'runner' | 'clicker' | 'game3d';
+  initialTab?: 'menu' | 'shooter' | 'runner' | 'clicker' | 'game3d' | 'anime';
 }
 
 export function ArcadeGame({ isOpen, onClose, initialTab = 'menu' }: ArcadeGameProps) {
-  // Game states: 'menu' | 'shooter' | 'runner' | 'clicker' | 'game3d'
-  const [activeTab, setActiveTab] = useState<'menu' | 'shooter' | 'runner' | 'clicker' | 'game3d'>('menu');
+  // Game states: 'menu' | 'shooter' | 'runner' | 'clicker' | 'game3d' | 'anime'
+  const [activeTab, setActiveTab] = useState<'menu' | 'shooter' | 'runner' | 'clicker' | 'game3d' | 'anime'>('menu');
 
   useEffect(() => {
     if (isOpen) {
@@ -1150,13 +1151,13 @@ export function ArcadeGame({ isOpen, onClose, initialTab = 'menu' }: ArcadeGameP
               </div>
 
               {/* Sub-Tabs Selector */}
-              <div className="flex items-center gap-1.5 bg-black/60 p-1 rounded-full border border-white/5">
+              <div className="flex items-center gap-1.5 bg-black/60 p-1 rounded-full border border-white/5 overflow-x-auto max-w-full no-scrollbar">
                 <button
                   onClick={() => {
                     setActiveTab('menu');
                     playSynthSound('click');
                   }}
-                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${
+                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 whitespace-nowrap ${
                     activeTab === 'menu' ? 'bg-primary text-black font-bold' : 'text-gray-400 hover:text-white'
                   }`}
                 >
@@ -1168,7 +1169,7 @@ export function ArcadeGame({ isOpen, onClose, initialTab = 'menu' }: ArcadeGameP
                     setShooterState('idle');
                     playSynthSound('click');
                   }}
-                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${
+                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 whitespace-nowrap ${
                     activeTab === 'shooter' ? 'bg-primary text-black font-bold' : 'text-gray-400 hover:text-white'
                   }`}
                 >
@@ -1180,7 +1181,7 @@ export function ArcadeGame({ isOpen, onClose, initialTab = 'menu' }: ArcadeGameP
                     setRunnerState('idle');
                     playSynthSound('click');
                   }}
-                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${
+                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 whitespace-nowrap ${
                     activeTab === 'runner' ? 'bg-primary text-black font-bold' : 'text-gray-400 hover:text-white'
                   }`}
                 >
@@ -1191,7 +1192,7 @@ export function ArcadeGame({ isOpen, onClose, initialTab = 'menu' }: ArcadeGameP
                     setActiveTab('clicker');
                     playSynthSound('click');
                   }}
-                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${
+                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 whitespace-nowrap ${
                     activeTab === 'clicker' ? 'bg-primary text-black font-bold' : 'text-gray-400 hover:text-white'
                   }`}
                 >
@@ -1203,11 +1204,22 @@ export function ArcadeGame({ isOpen, onClose, initialTab = 'menu' }: ArcadeGameP
                     setGame3DState('idle');
                     playSynthSound('click');
                   }}
-                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${
+                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 whitespace-nowrap ${
                     activeTab === 'game3d' ? 'bg-primary text-black font-bold' : 'text-gray-400 hover:text-white'
                   }`}
                 >
                   Cyber Swing ⚡
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('anime');
+                    playSynthSound('click');
+                  }}
+                  className={`text-[10px] sm:text-xs font-mono tracking-wider uppercase px-3.5 py-1.5 rounded-full cursor-pointer transition-all duration-300 whitespace-nowrap ${
+                    activeTab === 'anime' ? 'bg-primary text-black font-bold' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  Anime Guesser 🧠
                 </button>
               </div>
 
@@ -1237,8 +1249,8 @@ export function ArcadeGame({ isOpen, onClose, initialTab = 'menu' }: ArcadeGameP
                     </p>
                   </div>
 
-                  {/* 4 Games Selection Cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto w-full my-6">
+                  {/* 5 Games Selection Cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 max-w-5xl mx-auto w-full my-6">
                     {/* Game 1: Web Reflex */}
                     <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 flex flex-col justify-between hover:border-primary/40 transition-all duration-300 group shadow-md">
                       <div>
@@ -1350,6 +1362,35 @@ export function ArcadeGame({ isOpen, onClose, initialTab = 'menu' }: ArcadeGameP
                           onClick={() => {
                             setActiveTab('game3d');
                             startGame3D();
+                          }}
+                          className="w-full bg-primary text-black font-semibold text-xs py-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-transform group-hover:scale-[1.02] cursor-pointer"
+                        >
+                          <Play className="w-3 h-3 fill-black" /> Play Mode
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Game 5: Anime Guesser */}
+                    <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 flex flex-col justify-between hover:border-primary/40 transition-all duration-300 group shadow-md">
+                      <div>
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 border border-primary/20 shadow-lg shadow-primary/5">
+                          <Brain className="w-5 h-5 text-primary" />
+                        </div>
+                        <h4 className="text-lg font-medium text-white mb-1 flex justify-between items-baseline">
+                          <span>Anime Guesser</span>
+                          <span className="text-[10px] font-mono text-gray-500">TRIVIA</span>
+                        </h4>
+                        <p className="text-xs text-gray-400 font-light leading-relaxed mb-4">
+                          Эможи, зураг, видео ашиглан аниме-ийн нэр тааж оноо цуглуулна. Тэргүүлэгчдийн самбарт нэрээ үлдээгээрэй!
+                        </p>
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-mono text-primary/80 mb-3 flex items-center gap-1.5 bg-black/40 px-2.5 py-1 rounded border border-white/5 w-fit">
+                          <Trophy className="w-3.5 h-3.5" /> Trivia Matcher
+                        </div>
+                        <button
+                          onClick={() => {
+                            setActiveTab('anime');
                           }}
                           className="w-full bg-primary text-black font-semibold text-xs py-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-transform group-hover:scale-[1.02] cursor-pointer"
                         >
@@ -1835,6 +1876,11 @@ export function ArcadeGame({ isOpen, onClose, initialTab = 'menu' }: ArcadeGameP
                 </div>
               )}
 
+              {/* SCREEN INTERFACE Tab 6: ANIME GUESSER */}
+              {activeTab === 'anime' && (
+                <AnimeGuesser />
+              )}
+
             </div>
 
             {/* Retro Console Footer status bar */}
@@ -1845,7 +1891,7 @@ export function ArcadeGame({ isOpen, onClose, initialTab = 'menu' }: ArcadeGameP
                   ARCADE ONLINE
                 </span>
                 <span className="text-gray-800">|</span>
-                <span className="uppercase">Active: {activeTab === 'menu' ? 'Menu' : activeTab === 'shooter' ? 'Web Shooter' : activeTab === 'runner' ? 'Endless Swinger' : activeTab === 'clicker' ? 'Web Fluid Clicker' : 'Cyber Swing'}</span>
+                <span className="uppercase">Active: {activeTab === 'menu' ? 'Menu' : activeTab === 'shooter' ? 'Web Shooter' : activeTab === 'runner' ? 'Endless Swinger' : activeTab === 'clicker' ? 'Web Fluid Clicker' : activeTab === 'game3d' ? 'Cyber Swing' : 'Anime Guesser'}</span>
               </div>
               <div className="text-[10px] font-mono text-primary/70">
                 DESIGNED FOR CHINGUUN // PRISMA STUDIOS 2026
